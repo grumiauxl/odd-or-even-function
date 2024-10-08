@@ -23,8 +23,7 @@ node {
                 ]) {
             bat "az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID"
             bat "az account set -s $AZURE_SUBSCRIPTION_ID"
-
-            bat 'cd D:/workspace/AzurefunctionTest/target/azure-functions/odd-or-even-function-sample && zip -r ../../../archive.zip ./* && cd -'
+            bat 'cd D:/workspace/AzurefunctionTest/target/azure-functions/odd-or-even-function-sample && jar -cfM ../../../archive.zip ./* && cd -'
             bat "az functionapp deployment source config-zip -g $RESOURCE_GROUP -n $FUNC_NAME --src archive.zip"
             bat 'az logout'
             }
