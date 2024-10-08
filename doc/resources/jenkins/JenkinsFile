@@ -7,7 +7,7 @@ node {
         }
 
         stage('Build') {
-            ps 'mvn clean package'
+            bat 'mvn clean package'
         }
 
         stage('Publish') {
@@ -15,14 +15,14 @@ node {
             def FUNC_NAME = '<function_app>'
             // login Azure
             withCredentials([usernamePassword(credentialsId: 'Shredders2azuresp', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
-            ps '''
+            bat '''
                 az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
                 az account set -s $AZURE_SUBSCRIPTION_ID
             '''
             }
-            ps 'cd $PWD/target/azure-functions/odd-or-even-function-sample && zip -r ../../../archive.zip ./* && cd -'
-            ps "az functionapp deployment source config-zip -g $RESOURCE_GROUP -n $FUNC_NAME --src archive.zip"
-            ps 'az logout'
+            bat 'cd $PWD/target/azure-functions/odd-or-even-function-sample && zip -r ../../../archive.zip ./* && cd -'
+            bat "az functionapp deployment source config-zip -g $RESOURCE_GROUP -n $FUNC_NAME --src archive.zip"
+            bat 'az logout'
         }
     }
 }
