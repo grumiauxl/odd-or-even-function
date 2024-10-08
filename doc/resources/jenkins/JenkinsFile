@@ -4,12 +4,10 @@ node {
         stage('Init') {
             cleanWs()
             checkout scm
-            env.WORKSPACE = ${WORKSPACE}
         }
 
         stage('Build') {
-            bat 'mvn 
-            clean package'
+            bat 'mvn clean package'
         }
 
         stage('Publish') {
