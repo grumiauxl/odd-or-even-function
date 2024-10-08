@@ -7,7 +7,7 @@ node {
         }
 
         stage('Build') {
-            bat 'mvn clean package'
+            bat 'mvn -X clean package'
         }
 
         stage('Publish') {
