@@ -27,6 +27,7 @@ node {
             bat 'cd D:/workspace/AzurefunctionTest/target/azure-functions/odd-or-even-function-sample && zip -r ../../../archive.zip ./* && cd -'
             bat "az functionapp deployment source config-zip -g $RESOURCE_GROUP -n $FUNC_NAME --src archive.zip"
             bat 'az logout'
+            }
         }
     }
 }
