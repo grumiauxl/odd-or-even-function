@@ -4,14 +4,16 @@ node {
         stage('Init') {
             cleanWs()
             checkout scm
+            env.WORKSPACE = ${WORKSPACE}
         }
 
         stage('Build') {
-            bat 'mvn -X clean package'
+            bat 'mvn 
+            clean package'
         }
 
         stage('Publish') {
-            env.WORKSPACE = ${WORKSPACE}
+            
             def RESOURCE_GROUP = '<resource_group>' 
             def FUNC_NAME = '<function_app>'
             // login Azure
@@ -23,10 +25,8 @@ node {
                 ]) {
             bat "az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID"
             bat "az account set -s $AZURE_SUBSCRIPTION_ID"
-            }
-            echo "Workspace : "
-            echo env.WORKSPACE
-            bat "cd $env.WORKSPACE/target/azure-functions/odd-or-even-function-sample && zip -r ../../../archive.zip ./* && cd -"
+
+            bat 'cd D:/workspace/AzurefunctionTest/target/azure-functions/odd-or-even-function-sample && zip -r ../../../archive.zip ./* && cd -'
             bat "az functionapp deployment source config-zip -g $RESOURCE_GROUP -n $FUNC_NAME --src archive.zip"
             bat 'az logout'
         }
