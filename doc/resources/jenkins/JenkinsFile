@@ -1,6 +1,6 @@
 node {
-    withEnv(['AZURE_SUBSCRIPTION_ID=99999999-9999-9999-9999-999999999999',
-            'AZURE_TENANT_ID=99999999-9999-9999-9999-999999999999']) {
+    withEnv(['AZURE_SUBSCRIPTION_ID_TEMP=99999999-9999-9999-9999-999999999999',
+            'AZURE_TENANT_ID_TEMP=99999999-9999-9999-9999-999999999999']) {
         stage('Init') {
             cleanWs()
             checkout scm
@@ -14,7 +14,12 @@ node {
             def RESOURCE_GROUP = '<resource_group>' 
             def FUNC_NAME = '<function_app>'
             // login Azure
-            withCredentials([usernamePassword(credentialsId: 'Shredders2azuresp', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
+
+            withCredentials([
+                usernamePassword(credentialsId: 'Shredders2azuresp', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID'),
+                string(credentialsId: 'AZURE_SUBSCRIPTION_ID', variable: 'AZURE_SUBSCRIPTION_ID'),
+                string(credentialsId: 'AZURE_TENANT_ID', variable: 'AZURE_TENANT_ID'),
+                ]) {
             bat '''
                 az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
                 az account set -s $AZURE_SUBSCRIPTION_ID
